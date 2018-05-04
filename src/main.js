@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import 'normalize.css'  // 引入normalize.css保证所有平台默认样式一样
+import './assets/reset.scss'
+import './assets/iconfont/iconfont.js'
 
 Vue.config.productionTip = false
 

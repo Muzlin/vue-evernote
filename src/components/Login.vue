@@ -5,14 +5,14 @@
         <div class="modal-container">
           <div class="main"></div>
           <div class="form">
-            <h3>创建账户</h3>
-            <div v-show="true" class="register">
+            <h3 @click="loginChange">创建账户</h3>
+            <div v-show="register" class="register">
               <input type="text" placeholder="用户名">
               <input type="password" placeholder="密码">
               <div class="button">创建账号</div>
             </div>
-            <h3>登录</h3>
-            <div v-show="false" class="login">
+            <h3 @click="loginChange">登录</h3>
+            <div v-show="login" class="login">
               <input type="text" placeholder="输入用户名">
               <input type="password" placeholder="密码">
               <div class="button">登录</div>
@@ -22,8 +22,27 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
+
+<script>
+  export default {
+    data() {
+      return {
+        login: false,
+        register: true
+      }
+    },
+    methods: {
+      loginChange() {
+        this.login = !this.login
+        this.register = !this.register
+      }
+    }
+  }
+
+</script>
+
+
 <style lang="scss" scoped>
   #login {
     >.modal-mask {

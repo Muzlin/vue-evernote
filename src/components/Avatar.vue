@@ -19,8 +19,8 @@
 <style scoped>
   span {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     text-align: center;
     line-height: 32px;
     border-radius: 50%;
@@ -29,8 +29,8 @@
     text-shadow: 1px 0 1px #795c19;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 18px;
-    margin-top: 15px;
+    font-size: 16px;
+    margin-top: 16px;
   }
 
 </style>
