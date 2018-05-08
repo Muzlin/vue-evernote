@@ -18,21 +18,27 @@
         </svg>
       </router-link>
     </div>
+
     <div class="logout" @click="onLogout">
-      <i class="iconfont icon-logout"></i>
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-trash"></use>
+      </svg>
     </div>
   </div>
 </template>
 
 <script>
   import avatar from '@/components/Avatar'
+  import request from '@/helpers/request'
   export default {
     components: {
       avatar
     },
     methods: {
       onLogout() {
-
+        request('/auth/logout').then(data => {
+          console.log(data)
+        })
       }
     }
   }
