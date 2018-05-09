@@ -2,11 +2,12 @@
  *  请求帮助类
  */
 import axios from 'axios'
+import baseURLConfig from '@/helpers/config-baseURL'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = 'http://note-server.hunger-valley.com'
+// axios.defaults.baseURL = baseURLConfig.baseURL TODO:生成环境切换
 axios.defaults.withCredentials = true
-// axios.defaults.baseURL = 'http://192.168.18.27:8888/api'
 
 export default function request(url, method = 'GET', data = {}) {
   return new Promise((resolve, reject) => {

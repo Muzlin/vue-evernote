@@ -32,10 +32,11 @@
 </template>
 
 <script>
-request('/auth').then(data=>{
-  console.log(data)
-})
-  import request from '@/helpers/request'
+  import Auth from '@/apis/auth'
+  Auth.getInfo().then(data => {
+    console.log(data)
+  })
+
   export default {
     data() {
       return {
@@ -77,8 +78,13 @@ request('/auth').then(data=>{
         }
         this.register.isError = false
         this.register.notice = ''
-        request('/auth/register','POST',{username:this.register.username,password:this.register.password}).then(data=>{
+        Auth.register({
+          username: this.register.username,
+          password: this.register.password
+        }).then(data => {
           console.log(data)
+        }).catch(err => {
+          console.log('page-catch', err)
         })
       },
       onLogin() {
@@ -94,12 +100,16 @@ request('/auth').then(data=>{
         }
         this.login.isError = false
         this.login.notice = ''
-        request('/auth/login','POST',{username:this.login.username,password:this.login.password}).then(data=>{
+        Auth.login({
+          username: this.login.username,
+          password: this.login.password
+        }).then(data => {
           console.log(data)
+        }).catch(err => {
+          console.log(err)
         })
       }
     }
-
   }
 
 </script>
