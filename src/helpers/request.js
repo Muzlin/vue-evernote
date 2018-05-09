@@ -6,6 +6,7 @@ import baseURLConfig from '@/helpers/config-baseURL'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = 'http://note-server.hunger-valley.com'
+// axios.defaults.baseURL = 'http://192.168.18.46/api'
 // axios.defaults.baseURL = baseURLConfig.baseURL TODO:生成环境切换
 axios.defaults.withCredentials = true
 

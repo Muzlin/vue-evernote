@@ -33,10 +33,7 @@
 
 <script>
   import Auth from '@/apis/auth'
-  Auth.getInfo().then(data => {
-    console.log(data)
-  })
-
+  import Bus from '@/helpers/bus'
   export default {
     data() {
       return {
@@ -82,9 +79,18 @@
           username: this.register.username,
           password: this.register.password
         }).then(data => {
-          console.log(data)
-        }).catch(err => {
-          console.log('page-catch', err)
+          this.register.isError = false
+          this.register.notice = ''
+          // 在Bus 实例上触发监听的userInfo自定义事件
+          Bus.$emit('userInfo', {
+            username: this.register.username
+          })
+          this.$router.push({
+            path: '/notebooks'
+          })
+        }).catch(data => {
+          this.register.isError = true
+          this.register.notice = data.msg
         })
       },
       onLogin() {
@@ -104,9 +110,19 @@
           username: this.login.username,
           password: this.login.password
         }).then(data => {
-          console.log(data)
-        }).catch(err => {
-          console.log(err)
+          // 登录成功逻辑处理
+          this.login.isError = false
+          this.login.notice = ''
+          // 再Bus 的 vue实例上触发监听的自定义事件 -- 触发后所有参数都会传给监听器回调
+          Bus.$emit('userInfo', {
+            username: this.login.username
+          })
+          this.$router.push({
+            path: '/notebooks'
+          })
+        }).catch(data => {
+          this.login.isError = true
+          this.login.notice = data.msg
         })
       }
     }

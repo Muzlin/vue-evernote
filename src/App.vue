@@ -7,6 +7,7 @@
 
 <script>
   import sidebar from '@/components/Sidebar'
+  import Auth from '@/apis/auth'
   export default {
     name: 'App',
     components: {

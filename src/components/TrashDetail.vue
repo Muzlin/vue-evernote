@@ -5,11 +5,21 @@
 </template>
 
 <script>
+import Auth from '@/apis/auth'
   export default {
     data: function () {
       return {
         msg: '回收站'
       }
+    },
+    created() {
+      Auth.getInfo().then(res => {
+        if (!res.isLogin) {
+          this.$router.push({
+            path: '/login'
+          })
+        }
+      })
     }
   }
 
