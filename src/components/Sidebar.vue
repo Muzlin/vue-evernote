@@ -4,14 +4,16 @@
     <div class="icons">
       <router-link to="/note/1" title="笔记">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-pen"></use>
+          <use xlink:href="#icon-write"></use>
         </svg>
       </router-link>
+
       <router-link to="/notebooks" title="笔记本">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-notebook"></use>
         </svg>
       </router-link>
+
       <router-link to="/trash/2" title="回收站">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-trash"></use>
@@ -60,7 +62,7 @@
         display: block;
         margin-top: 8px;
       }
-      >.router-link-active {
+      .router-link-active {
         background-color: #5e6266;
         .icon {
           fill: #fff;

@@ -1,0 +1,61 @@
+#notebook-list {
+  flex: 1;
+  header {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    .btn {
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+      margin-left: 10px;
+      padding: 10px;
+    }
+  }
+  main {
+    padding: 30px 40px;
+    .layout {
+      max-width: 966px;
+      margin: 0 auto;
+      h3 {
+        font-size: 12px;
+        color: #000;
+      }
+      .book-list {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+        background-color: #fff;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .notebook {
+        &:hover {
+          background-color: #f7fafd;
+        }
+        display: block;
+        cursor: pointer;
+        div {
+          border-bottom: 1px solid #ebebeb;
+          padding: 12px 14px;
+          .title {
+            color: #000;
+            margin-left: 5px;
+          }
+          .count{
+            font-size: 8px;
+            color: #b3c0c8
+          }
+          .action {
+            float: right;
+            margin-left: 10px;
+            color: #b3c0c8;
+          }
+          .date{
+            color: #b3c0c8;
+            font-size: 8px;
+          }
+        }
+      }
+    }
+  }
+}
