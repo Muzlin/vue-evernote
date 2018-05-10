@@ -91,7 +91,7 @@
         this.$prompt('请输入笔记本标题', '修改笔记本', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /^.{1,301}$/,
+          inputPattern: /^.{1,30}$/,
           inputErrorMessage: '标题不能为空,且不能超哥30个字符'
         }).then(({
           value
