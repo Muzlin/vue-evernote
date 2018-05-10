@@ -4,6 +4,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# element 自定义主题文件
 theme/
 
 # Editor directories and files
