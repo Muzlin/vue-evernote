@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VeeVaidate from 'vee-validate'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Notebooks from '@/components/NotebookList'
