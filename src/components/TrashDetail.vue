@@ -1,6 +1,6 @@
 <template>
   <div id="note-trash">
-    <h1>{{msg}}:{{$route.params.id}}</h1>
+    <h1>{{msg}}:{{$route.query.noteId}}</h1>
   </div>
 </template>
 

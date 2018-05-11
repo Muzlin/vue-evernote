@@ -1,61 +1,86 @@
-#notebook-list {
+#notebook-list{
   flex: 1;
-  header {
+  .btn{
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    border :1px solid #ccc;
+    border-radius: 4px;
+
+  }
+  .btn .iconfont{
+    font-size: 14x;
+
+  }
+
+  input{
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+
+
+  }
+  header{
     padding: 12px;
     border-bottom: 1px solid #ccc;
-    .btn {
-      font-size: 12px;
-      color: #666;
-      cursor: pointer;
-      margin-left: 10px;
-      padding: 10px;
-    }
   }
-  main {
+  main{
     padding: 30px 40px;
-    .layout {
-      max-width: 966px;
-      margin: 0 auto;
-      h3 {
-        font-size: 12px;
-        color: #000;
-      }
-      .book-list {
-        margin-top: 10px;
-        font-size: 14px;
-        color: #666;
-        background-color: #fff;
-        border-radius: 4px;
-        font-weight: bold;
-      }
-      .notebook {
-        &:hover {
-          background-color: #f7fafd;
-        }
-        display: block;
-        cursor: pointer;
-        div {
-          border-bottom: 1px solid #ebebeb;
-          padding: 12px 14px;
-          .title {
-            color: #000;
-            margin-left: 5px;
-          }
-          .count{
-            font-size: 8px;
-            color: #b3c0c8
-          }
-          .action {
-            float: right;
-            margin-left: 10px;
-            color: #b3c0c8;
-          }
-          .date{
-            color: #b3c0c8;
-            font-size: 8px;
-          }
-        }
-      }
-    }
+  }
+  .layout{
+    max-width: 966px;
+    margin: 0 auto
+  }
+  main h3{
+    font-size: 14px;
+    color:#000;
+  }
+
+  main .book-list {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+    background-color: #fff;
+    font-weight: bold;
+    border:1px solid #fff;
+    border-radius: 4px;
+  }
+  main .book-list span {
+    font-size: 12px;
+    font-weight: bold;
+    color: #b3c0c8;
+  }
+  main .data,
+  main .action{
+    float: right;
+    margin-left: 10px;
+  }
+  main .iconfont{
+    color: #1687ea;
+    margin-right: 4px;
+
+  }
+  main .notebook{
+    display: block;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc
+
+  }
+  main .notebook:last-child{
+    border-bottom: none;
+  }
+  main a:hover{
+    background-color: #f7fafd;
+  }
+  main a.notebook div{
+    padding: 10px;
+
+
+  }
+  main .error-msg{
+    font-size: 12px;
+    color:red;
   }
 }

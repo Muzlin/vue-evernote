@@ -1,27 +1,20 @@
 <template>
   <div class="detail" id="notebook-list">
     <header>
-      <a href="#" @click.stop.prevent="onCreate" class="btn">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-jiahao"></use>
-        </svg>
-        <span>新建笔记本</span>
-      </a>
+      <a href="#" class='btn' @click.stop.prevent="onCreate">
+        <i class="iconfont icon-jiahao"></i> 新建笔记本</a>
     </header>
     <main>
       <div class="layout">
         <h3>笔记本列表({{notebooks.length}})</h3>
         <div class="book-list">
-          <router-link v-for="item in notebooks" v-bind:key="item.id" to="/note/1" class="notebook">
+          <router-link :to="`/note?notebookId=${notebook.id}`" class="notebook" v-for="(notebook,index) in notebooks" v-bind:key="index">
             <div>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-notebook"></use>
-              </svg>
-              <span class="title">{{item.title}}</span>
-              <span class="count">{{item.noteCounts}}</span>
-              <span class="action" @click.stop.prevent="onEdit(item)">编辑</span>
-              <span class="action" @click.stop.prevent="onDelete(item)">删除</span>
-              <span class="date">{{item.friendlyCreatedAt}}</span>
+              <span class="iconfont icon-icon-test"></span> {{notebook.title}}
+              <span>{{notebook.noteCounts}}</span>
+              <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>
+              <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>
+              <span class="data">{{notebook.friendlyCreatedAt}}</span>
             </div>
           </router-link>
         </div>
@@ -33,7 +26,6 @@
 <script>
   import Auth from '@/apis/auth'
   import Notebooks from '@/apis/notebook'
-  window.note_test = Notebooks
   export default {
     data() {
       return {
@@ -71,10 +63,7 @@
             title
           })
         }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '成功创建新的笔记本: ' + title
-          })
+          this.$message.success(`成功创建新的笔记本:${title}`)
           // 重新获取列表
           Notebooks.getAll().then(res => {
             this.notebooks = res.data
@@ -86,18 +75,19 @@
           })
         })
       },
-      onEdit(item) {
+      onEdit(notebook) {
         let title = ''
         this.$prompt('请输入笔记本标题', '修改笔记本', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^.{1,30}$/,
-          inputErrorMessage: '标题不能为空,且不能超哥30个字符'
+          inputErrorMessage: '标题不能为空,且不能超哥30个字符',
+          inputValue: notebook.title
         }).then(({
           value
         }) => {
           title = value
-          return Notebooks.updateNotebook(item.id, {
+          return Notebooks.updateNotebook(notebook.id, {
             title
           })
         }).then(res => {
@@ -105,7 +95,7 @@
             type: 'success',
             message: res.msg
           })
-          item.title = title
+          notebook.title = title
         }).catch(res => {
           this.$message({
             type: res !== 'cancel' ? 'error' : 'info',
@@ -113,19 +103,19 @@
           })
         })
       },
-      onDelete(item) {
+      onDelete(notebook) {
         this.$confirm('此操作将该笔记本放入回收站, 是否继续?', '删除笔记本', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return Notebooks.deleteNotebook(item.id)
+          return Notebooks.deleteNotebook(notebook.id)
         }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
           })
-          this.notebooks.splice(this.notebooks.indexOf(item), 1)
+          this.notebooks.splice(this.notebooks.indexOf(notebook), 1)
         }).catch(res => {
           this.$message({
             type: res !== 'cancel' ? 'error' : 'info',

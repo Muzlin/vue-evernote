@@ -120,6 +120,7 @@
           this.$router.push({
             path: '/notebooks'
           })
+          this.$message.success('登录成功')
         }).catch(data => {
           this.login.isError = true
           this.login.notice = data.msg
