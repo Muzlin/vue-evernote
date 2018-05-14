@@ -1,4 +1,4 @@
-# vue-evernote-client
+# vue-evernote
 
 > A Vue.js project
 
