@@ -50,6 +50,10 @@
         return Notes.getAll({notebookId: this.curBook.id})
       }).then(res=>{
         this.notes = res.data
+        // 触发一个watch:notes事件  父组件监听 获取回调数据
+        this.$emit('watch:notes',this.notes)
+        // 利用bus去触发 监听
+        Bus.$emit('watch:notes',this.notes)
       })
     },
     methods: {
@@ -60,6 +64,8 @@
         this.curBook = notebook
         Notes.getAll({notebookId:notebook.id}).then(res=>{
           this.notes = res.data
+          // 触发一个watch:notes事件  父组件监听 获取回调数据
+          this.$emit('watch:notes', this.notes)
         })
       },
       onCreate(notebookId){
@@ -74,9 +80,7 @@
           return Notes.addNote({notebookId},{title})
         }).then(res=>{
           this.$message.success(res.msg)
-          Notes.getAll({notebookId: notebookId}).then(res=>{
-            this.notes = res.data
-          })
+          this.notes.unshift(res.data)
         })
       },
     }

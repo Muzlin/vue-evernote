@@ -17,7 +17,7 @@ export default {
         // 时间格式化
         res.data.map(item=>{
           item.createdAtFriendly = friendlyDate(item.createdAt)
-          item.updateAtFriendly = friendlyDate(item.updateAt)
+          item.updatedAtFriendly = friendlyDate(item.updatedAt)
         })
         resolve(res)
       }).catch(err => {
@@ -32,6 +32,15 @@ export default {
     return request(URL.DELETE.replace(':noteId',noteId),'DELETE')
   },
   addNote({notebookId},{title = '', content = ''} = {title : '', content : ''}){
-    return request(URL.ADD.replace(':notebookId',notebookId),'POST',{title,content})
+    return new Promise((resolve,reject)=>{
+      request(URL.ADD.replace(':notebookId',notebookId),'POST',{title,content}).then(res=>{
+        // 时间格式化
+        res.data.createdAtFriendly = friendlyDate(res.data.createdAt)
+        res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt)
+        resolve(res)
+      }).catch(err=>{
+        reject(err)
+      })
+    })
   }
 }

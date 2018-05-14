@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Notebooks from '@/components/NotebookList'
-import Note from '@/components/NoteDetail'
+import NoteDetail from '@/components/NoteDetail'
 import Trash from '@/components/TrashDetail'
 
 Vue.use(Router)
@@ -26,7 +26,7 @@ export default new Router({
     },
     {
       path: '/note',
-      component: Note
+      component: NoteDetail
     },
     {
       path:'/trash',

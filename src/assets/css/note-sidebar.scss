@@ -34,11 +34,15 @@
   }
   .notes{
     li{
-      padding: 3px 0;
+      //padding: 3px 0;
+      // border: 1px solid red;
+      margin: 5px 0;
       a{
         display: flex;
         width: 100%;
         border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        height: 24px;
         span{
           flex: 1;
           padding: 5px 10px;
@@ -47,8 +51,7 @@
         }
       }
       .router-link-exact-active{
-        border: 2px solid #81c0f3;
-        border-radius: 3px;
+        outline: 2px solid#5CC9F5;
       }
     }
   }
