@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
-const mockBaseURL = 'http://192.168.18.46/api'
-const realBaseURL = 'http://note-server.hunger-valley.com'
+const mockBaseURL = 'http://note-server.hunger-valley.com'
+const realBaseURL = 'https://note-server.hunger-valley.com'
 
 exports.config = function ({isDev = true} = {isDev : true}) {
   let fileTxt = `
