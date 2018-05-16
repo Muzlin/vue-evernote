@@ -43,7 +43,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/evernote-vue/dist',
+    assetsPublicPath: '/vue-evernote/dist',
 
     /**
      * Source Maps
