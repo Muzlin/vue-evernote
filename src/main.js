@@ -10,6 +10,7 @@ import '../theme/index.css' // 使用自定义的element ui
 import 'normalize.css'  // 引入normalize.css保证所有平台默认样式一样
 import './assets/reset.scss'
 //import './assets/iconfont/iconfont.js'
+import store from './store'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
@@ -18,6 +19,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

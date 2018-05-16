@@ -1,14 +1,14 @@
 <template>
   <div id="note-sidebar">
     <div class="title">
-      <span class="btn add-note" @click="onCreate(curBook.id)">添加笔记</span>
+      <span class="btn add-note" @click="onCreate(curNotebook.id)">添加笔记</span>
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
-          {{curBook.title}}
+          {{curNotebook.title}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(notebook,index) in notebooks" :key="index" :command="notebook">{{notebook.title}}</el-dropdown-item>
+          <el-dropdown-item v-for="(notebook,index) in notebooks" :key="index" :command="notebook.id">{{notebook.title}}</el-dropdown-item>
           <el-dropdown-item command="trash">回收站</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -30,43 +30,40 @@
 </template>
 
 <script>
-  import Notebooks from '@/apis/notebook'
-  import Notes from '@/apis/notes'
-  import Bus from '@/helpers/bus'
-  import notebook from '../apis/notebook';
+  import {mapActions,mapGetters} from 'vuex'
   export default {
     data() {
       return {
-        notebooks: [],
-        notes: [],
-        curBook: {}
       }
     },
     created() {
-      Notebooks.getAll().then(res => {
-        this.notebooks = res.data
-        // 获取当前笔记本数据 根据路由获取notebookId 默认为笔记本第一个
-        this.curBook = res.data.find(notebook => notebook.id == this.$route.query.notebookId) || res.data[0] || {}
-        return Notes.getAll({notebookId: this.curBook.id})
-      }).then(res=>{
-        this.notes = res.data
-        // 触发一个watch:notes事件  父组件监听 获取回调数据
-        this.$emit('watch:notes',this.notes)
-        // 利用bus去触发 监听
-        Bus.$emit('watch:notes',this.notes)
+      this.getNotebooks().then(()=>{
+        // 设置当前笔记本id
+        this.$store.commit('setCurNotebookId',{curNotebookId: this.$route.query.notebookId})
+        // 获取当前笔记本下的笔记
+        this.getNotes({notebookId: this.curNotebook.id})
       })
     },
+    computed:{
+      ...mapGetters([
+        'notebooks',
+        'curNotebook',
+        'notes'
+      ])
+    },
     methods: {
-      handleCommand(notebook) {
-        if (notebook === 'trash') {
+      ...mapActions([
+        'getNotebooks',
+        'getNotes',
+        'addNote'
+      ]),
+      handleCommand(notebookId) {
+        if (notebookId === 'trash') {
           return this.$router.push('/trash')
         }
-        this.curBook = notebook
-        Notes.getAll({notebookId:notebook.id}).then(res=>{
-          this.notes = res.data
-          // 触发一个watch:notes事件  父组件监听 获取回调数据
-          this.$emit('watch:notes', this.notes)
-        })
+        // 设置切换后的 当前笔记本id
+        this.$store.commit('setCurNotebookId',{curNotebookId: notebookId})
+        this.getNotes({notebookId})
       },
       onCreate(notebookId){
         let title = ''
@@ -76,11 +73,7 @@
           inputPattern: /^.{1,30}$/,
           inputErrorMessage: '标题不能为空且不能超过30个字符'
         }).then(({ value }) => {
-          title = value
-          return Notes.addNote({notebookId},{title})
-        }).then(res=>{
-          this.$message.success(res.msg)
-          this.notes.unshift(res.data)
+          this.addNote({notebookId,title:value})
         })
       },
     }

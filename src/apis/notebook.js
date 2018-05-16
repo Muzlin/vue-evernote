@@ -24,6 +24,7 @@ export default{
         res.data.forEach(item=>{
           // 添加新的时间字段
           item.friendlyCreatedAt = friendlyDate(item.createdAt)
+          item.friendlyUpdatedAt = friendlyDate(item.updatedAt)
         })
         resolve(res)
       }).catch(err=>{
@@ -38,6 +39,14 @@ export default{
     return request(URL.DELETE.replace(':id',notebookId),'DELETE')
   },
   addNotebook({title = ''} = {title : ''}){
-    return request(URL.ADD,'POST',{title})
+    return new Promise((resolve,reject)=>{
+      request(URL.ADD,'POST',{title}).then(res=>{
+        res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
+        res.data.friendlyUpdatedAt = friendlyDate(res.data.updatedAt)
+        resolve(res)
+      }).catch(err=>{
+        reject(err)
+      })
+    })
   }
 }

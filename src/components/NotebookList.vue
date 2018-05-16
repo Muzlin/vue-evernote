@@ -25,11 +25,12 @@
 </template>
 <script>
   import Auth from '@/apis/auth'
-  import Notebooks from '@/apis/notebook'
+  import {mapState,mapActions,mapGetters} from 'vuex'
+
   export default {
     data() {
       return {
-        notebooks: []
+        //notebooks: []
       }
     },
     created() {
@@ -39,40 +40,27 @@
               path: '/login'
             })
           }
-        }),
-        Notebooks.getAll().then(res => {
-          this.notebooks = res.data
         })
+      this.$store.dispatch('getNotebooks')
     },
     computed: {
-
+      ...mapGetters(['notebooks'])
     },
     methods: {
+      ...mapActions([
+        'getNotebooks',
+        'addNotebook',
+        'updateNotebook',
+        'deleteNotebook'
+      ]),
       onCreate() {
-        let title = ''
         this.$prompt('请输入笔记本标题', '创建笔记本', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^.{1,30}$/,
           inputErrorMessage: '标题不能为空,且不能超哥30个字符'
-        }).then(({
-          value
-        }) => {
-          title = value
-          return Notebooks.addNotebook({
-            title
-          })
-        }).then(res => {
-          this.$message.success(`成功创建新的笔记本:${title}`)
-          // 重新获取列表
-          Notebooks.getAll().then(res => {
-            this.notebooks = res.data
-          })
-        }).catch(res => {
-          this.$message({
-            type: res !== 'cancel' ? 'error' : 'info',
-            message: res !== 'cancel' ? res.msg : '取消创建'
-          })
+        }).then(({value}) => {
+          this.addNotebook({title: value})
         })
       },
       onEdit(notebook) {
@@ -83,24 +71,8 @@
           inputPattern: /^.{1,30}$/,
           inputErrorMessage: '标题不能为空,且不能超哥30个字符',
           inputValue: notebook.title
-        }).then(({
-          value
-        }) => {
-          title = value
-          return Notebooks.updateNotebook(notebook.id, {
-            title
-          })
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: res.msg
-          })
-          notebook.title = title
-        }).catch(res => {
-          this.$message({
-            type: res !== 'cancel' ? 'error' : 'info',
-            message: res !== 'cancel' ? res.msg : '取消删除'
-          })
+        }).then(({ value }) => {
+          this.updateNotebook({notebookId: notebook.id,title: value})
         })
       },
       onDelete(notebook) {
@@ -109,18 +81,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return Notebooks.deleteNotebook(notebook.id)
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.notebooks.splice(this.notebooks.indexOf(notebook), 1)
-        }).catch(res => {
-          this.$message({
-            type: res !== 'cancel' ? 'error' : 'info',
-            message: res !== 'cancel' ? res.msg : '取消删除'
-          })
+          this.deleteNotebook({notebookId: notebook.id})
         })
       }
     }

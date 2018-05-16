@@ -9,15 +9,15 @@
           <span> 创建日期：{{curNote.createdAtFriendly}}</span>
           <span> 更新日期：{{curNote.updatedAtFriendly}}</span>
           <span>{{statusText}}</span>
-          <span @click="deleteNote" class='iconfont icon-trash'></span>
+          <span @click="onDeleteNote" class='iconfont icon-trash'></span>
           <span @click="markdown" :class="`iconfont ${isShowPreview?'icon-tuichuquanping':'icon-quanping'}`"></span>
         </div>
         <div class="note-title">
-          <input type="text" v-model="curNote.title" @input="updateNote" @keydown="statusText='正在输入...'" placeholder="输入标题">
+          <input type="text" v-model="curNote.title" @input="onUpdateNote" @keydown="statusText='正在输入...'" placeholder="输入标题">
 
         </div>
         <div class="editor">
-          <textarea v-show="!isShowPreview" v-model="curNote.content" @input="updateNote" @keydown="statusText='正在输入...'" placeholder="输入内容 支持markdown"></textarea>
+          <textarea v-show="!isShowPreview" v-model="curNote.content" @input="onUpdateNote" @keydown="statusText='正在输入...'" placeholder="输入内容 支持markdown"></textarea>
           <div class="preview markdown-body" v-html="previewContent" v-show="isShowPreview"></div>
         </div>
       </div>
@@ -28,11 +28,10 @@
 
 <script>
   import NoteSidebar from '@/components/NoteSidebar'
-  import Auth from "@/apis/auth"
-  import Bus from '@/helpers/bus'
   import _ from 'lodash' // 截流模块
-  import Notes from '@/apis/notes'
   import MarkdownIt from 'markdown-it'
+  import Auth from '@/apis/auth'
+  import { mapGetters,mapActions } from 'vuex'
 
   let md = new MarkdownIt()
 
@@ -43,10 +42,17 @@
     },
     data() {
       return {
-        curNote: {},
-        notes: [],
         statusText:'未改动',
         isShowPreview: false
+      }
+    },
+    computed:{
+      ...mapGetters([
+        'notes',
+        'curNote'
+      ]),
+      previewContent(){
+        return md.render(this.curNote.content+'')
       }
     },
     created() {
@@ -57,44 +63,33 @@
           })
         }
       })
-      // 监听子组件bus的触发事件 获取回调数据 监听一次  只在创建的时候监听
-      Bus.$once('watch:notes',val=>{
-        this.curNote = val.find(note=>note.id == this.$route.query.noteId) || {}
-      })
+      // 设置当前笔记id
+      this.$store.commit('setCurNoteId',{noteId: this.$route.query.noteId})
     },
     beforeRouteUpdate(to, from, next) {
-      // 在当前路由改变，但是该组件被复用时调用
-      // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
-      // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
-      // 可以访问组件实例 `this`
-      // console.log(to.query.noteId)
-      // find 这里不能用 ===  不然匹配不到
-      this.curNote = this.notes.find(note => note.id == to.query.noteId) || {}
+      this.$store.commit('setCurNoteId',{noteId: to.query.noteId})
       next()
     },
-    computed:{
-      previewContent(){
-        return md.render(this.curNote.content+'')
-      }
-    },
     methods:{
+      ...mapActions([
+        'updateNote',
+        'deleteNote'
+      ]),
       // 用户输入的时候自动保存
       // 这里使用截流函数 保持一定的事件内调用更新接口
-      updateNote: _.debounce(function(){
-        Notes.updateNote({
+      onUpdateNote: _.debounce(function(){
+        this.updateNote({
           noteId: this.curNote.id,
           title: this.curNote.title,
           content: this.curNote.content
-        }).then(res=>{
+        }).then(()=>{
           this.statusText = '已保存'
-        }).catch(err=>{
+        }).catch(()=>{
           this.statusText = '保存失败'
         })
       },500),
-      deleteNote(){
-        Notes.deleteNote({noteId:this.curNote.id}).then(data=>{
-          this.$message.success(data.msg)
-          this.notes.splice(this.notes.indexOf(this.curNote),1)
+      onDeleteNote(){
+        this.deleteNote({noteId:this.curNote.id}).then(()=>{
           this.$router.replace({path:'/note'})
         })
       },
