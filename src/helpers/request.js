@@ -6,9 +6,8 @@ import baseURLConfig from '@/helpers/config-baseURL'
 import { Message } from 'element-ui'  // 单独引入element ui 的message模块
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.baseURL = 'http://note-server.hunger-valley.com'
-// axios.defaults.baseURL = 'http://192.168.18.46/api'
-// axios.defaults.baseURL = baseURLConfig.baseURL TODO:生成环境切换
+// axios.defaults.baseURL = 'http://note-server.hunger-valley.com'
+axios.defaults.baseURL = baseURLConfig.baseURL // 地址自动切换
 axios.defaults.withCredentials = true
 
 export default function request(url, method = 'GET', data = {}) {
