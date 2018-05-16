@@ -34,24 +34,21 @@
       }
     },
     created() {
-      Auth.getInfo().then(res => {
-          if (!res.isLogin) {
-            this.$router.push({
-              path: '/login'
-            })
-          }
-        })
-      this.$store.dispatch('getNotebooks')
+      this.checkLogin()
+      this.getNotebooks()
     },
     computed: {
-      ...mapGetters(['notebooks'])
+      ...mapGetters([
+        'notebooks',
+      ])
     },
     methods: {
       ...mapActions([
         'getNotebooks',
         'addNotebook',
         'updateNotebook',
-        'deleteNotebook'
+        'deleteNotebook',
+        'checkLogin'
       ]),
       onCreate() {
         this.$prompt('请输入笔记本标题', '创建笔记本', {

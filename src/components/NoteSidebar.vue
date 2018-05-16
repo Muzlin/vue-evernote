@@ -1,5 +1,5 @@
 <template>
-  <div id="note-sidebar">
+  <div id="note-sidebar" class="note-sidebar">
     <div class="title">
       <span class="btn add-note" @click="onCreate(curNotebook.id)">添加笔记</span>
       <el-dropdown @command="handleCommand">

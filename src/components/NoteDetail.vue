@@ -30,7 +30,6 @@
   import NoteSidebar from '@/components/NoteSidebar'
   import _ from 'lodash' // 截流模块
   import MarkdownIt from 'markdown-it'
-  import Auth from '@/apis/auth'
   import { mapGetters,mapActions } from 'vuex'
 
   let md = new MarkdownIt()
@@ -56,13 +55,7 @@
       }
     },
     created() {
-      Auth.getInfo().then(res => {
-        if (!res.isLogin) {
-          this.$router.push({
-            path: '/login'
-          })
-        }
-      })
+      this.checkLogin()
       // 设置当前笔记id
       this.$store.commit('setCurNoteId',{noteId: this.$route.query.noteId})
     },
@@ -73,7 +66,8 @@
     methods:{
       ...mapActions([
         'updateNote',
-        'deleteNote'
+        'deleteNote',
+        'checkLogin'
       ]),
       // 用户输入的时候自动保存
       // 这里使用截流函数 保持一定的事件内调用更新接口

@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import Auth from '@/apis/auth'
-  import Bus from '@/helpers/bus'
+  import {mapGetters,mapActions} from 'vuex'
+
   export default {
     data() {
       return {
@@ -54,6 +54,10 @@
       }
     },
     methods: {
+      ...mapActions({
+        registerUser:'register',
+        loginUser:'login'
+      }),
       showLogin() {
         this.isShowLogin = true
         this.isShowRegister = false
@@ -75,20 +79,14 @@
         }
         this.register.isError = false
         this.register.notice = ''
-        Auth.register({
+        this.registerUser({
           username: this.register.username,
           password: this.register.password
-        }).then(data => {
+        }).then(() => {
           this.register.isError = false
           this.register.notice = ''
-          // 在Bus 实例上触发监听的userInfo自定义事件
-          Bus.$emit('userInfo', {
-            username: this.register.username
-          })
-          this.$router.push({
-            path: '/notebooks'
-          })
-        }).catch(data => {
+          this.$router.push({path: '/notebooks'})
+        }).catch(() => {
           this.register.isError = true
           this.register.notice = data.msg
         })
@@ -106,22 +104,18 @@
         }
         this.login.isError = false
         this.login.notice = ''
-        Auth.login({
+        this.loginUser({
           username: this.login.username,
           password: this.login.password
-        }).then(data => {
+        }).then(() => {
           // 登录成功逻辑处理
           this.login.isError = false
           this.login.notice = ''
-          // 再Bus 的 vue实例上触发监听的自定义事件 -- 触发后所有参数都会传给监听器回调
-          Bus.$emit('userInfo', {
-            username: this.login.username
-          })
           this.$router.push({
             path: '/notebooks'
           })
           this.$message.success('登录成功')
-        }).catch(data => {
+        }).catch(() => {
           this.login.isError = true
           this.login.notice = data.msg
         })
