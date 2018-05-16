@@ -1,5 +1,5 @@
 
     module.exports = {
-      baseURL: 'http://192.168.18.46/api'
+      baseURL: 'http://note-server.hunger-valley.com'
     }
   
