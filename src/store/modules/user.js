@@ -36,7 +36,9 @@ const actions = {
       commit('setUser',{user:res.data})
     })
   },
-  checkLogin({commit},{path='/login'}={path:'/login'}){
+  checkLogin({commit,state},{path='/login'}={path:'/login'}){
+    // 如果存在数据 则直接返回一个promise对象
+    if(state.user != null) return Promise.resolve()
     return Auth.getInfo().then(res=>{
       if(res.isLogin){
         commit('setUser',{user:res.data})

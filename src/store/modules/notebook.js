@@ -42,7 +42,9 @@ const mutations = {
 
 // 动作
 const actions = {
-  getNotebooks({commit}){
+  getNotebooks({commit,state}){
+    // 如果存在数据 则直接返回一个promise对象
+    if(state.notebooks != null) return Promise.resolve()
     // 继续return 一个promise对象
     return Notebook.getAll().then(res=>{
       commit('setNotebooks',{notebooks:res.data})

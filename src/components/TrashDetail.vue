@@ -22,11 +22,11 @@
       <div class="note-empty" v-show="!curTrashNote.id">请选择笔记</div>
       <div class="note-content">
         <div class="note-bar" v-if="curTrashNote.id">
-          <span>创建日期: {{curTrashNote.createdAtFriendly}}</span>
+          <span>创建日期: {{curTrashNote.friendlyCreatedAt}}</span>
           <span> | </span>
-          <span>更新日期: {{curTrashNote.updatedAtFriendly}}</span>
+          <span>更新日期: {{curTrashNote.friendlyUpdatedAt}}</span>
           <span> | </span>
-          <!-- <span>所属笔记本: {{belongTo}}</span> -->
+          <span>所属笔记本: {{belongTo}}</span>
           <a class="btn action" @click="onRevert">恢复</a>
           <a class="btn action" @click="onDelete">彻底刪除</a>
         </div>
@@ -49,14 +49,19 @@
 
   export default {
     created(){
-      this.getTrashNotes()
-      this.checkLogin()
-      this.$store.commit('setCurTrashNoteId',{curTransNoteId:this.$route.query.noteId})
+      this.checkLogin().then(()=>{
+        return this.getTrashNotes()
+      }).then(()=>{
+        this.$store.commit('setCurTrashNoteId',{curTransNoteId:this.$route.query.noteId})
+      }).then(()=>{
+        this.getNotebooks()
+      })
     },
     computed:{
       ...mapGetters([
         'trashNotes',
-        'curTrashNote'
+        'curTrashNote',
+        'belongTo'
       ]),
       compiledMarkdown() {
         return md.render(this.curTrashNote.content + '')
@@ -67,7 +72,8 @@
         'checkLogin',
         'getTrashNotes',
         'deleteTrashNote',
-        'revertTrashNote'
+        'revertTrashNote',
+        'getNotebooks'
       ]),
       onRevert() {
         this.revertTrashNote({trashNoteId:this.curTrashNote.id}).then(()=>{
